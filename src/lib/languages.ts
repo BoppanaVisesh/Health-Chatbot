@@ -6,4 +6,12 @@ export const supportedLanguages = [
     { value: 'ja', label: 'Japanese' },
     { value: 'ko', label: 'Korean' },
     { value: 'zh', label: 'Chinese' },
+    { value: 'hi', label: 'Hindi' },
+    { value: 'bn', label: 'Bengali' },
+    { value: 'ta', label: 'Tamil' },
+    { value: 'te', label: 'Telugu' },
+    { value: 'mr', label: 'Marathi' },
+    { value: 'gu', label: 'Gujarati' },
+    { value: 'kn', label: 'Kannada' },
+    { value: 'ml', label: 'Malayalam' },
   ];
