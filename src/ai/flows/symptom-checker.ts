@@ -15,6 +15,12 @@ const SymptomCheckerInputSchema = z.object({
   symptoms: z
     .string()
     .describe('A detailed description of the symptoms experienced by the user.'),
+  photoDataUri: z
+    .string()
+    .optional()
+    .describe(
+      "An optional photo of the symptom, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+    ),
 });
 export type SymptomCheckerInput = z.infer<typeof SymptomCheckerInputSchema>;
 
@@ -43,11 +49,15 @@ const symptomCheckerPrompt = ai.definePrompt({
   name: 'symptomCheckerPrompt',
   input: {schema: SymptomCheckerInputSchema},
   output: {schema: SymptomCheckerOutputSchema},
-  prompt: `You are an AI-powered symptom checker. A user will describe their symptoms, and you will provide potential causes, recommended actions, and an urgency level.
+  prompt: `You are an AI-powered symptom checker. A user will describe their symptoms, and you will provide potential causes, recommended actions, and an urgency level. You may also be provided with an image.
 
 Symptoms: {{{symptoms}}}
 
-Respond in a structured JSON format.
+{{#if photoDataUri}}
+Photo of symptom: {{media url=photoDataUri}}
+{{/if}}
+
+Analyze the provided information and respond in a structured JSON format.
 `,
 });
 

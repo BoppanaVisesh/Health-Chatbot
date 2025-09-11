@@ -15,13 +15,19 @@ export async function checkSymptoms(
   formData: FormData
 ): Promise<SymptomCheckerState> {
   const symptoms = formData.get("symptoms");
+  const photoDataUri = formData.get("photoDataUri");
 
   if (!symptoms || typeof symptoms !== "string" || symptoms.length < 10) {
     return { error: "Please describe your symptoms in more detail (at least 10 characters)." };
   }
 
+  const input: {symptoms: string, photoDataUri?: string} = { symptoms };
+  if (photoDataUri && typeof photoDataUri === "string" && photoDataUri.startsWith('data:image')) {
+    input.photoDataUri = photoDataUri;
+  }
+
   try {
-    const result = await symptomChecker({ symptoms });
+    const result = await symptomChecker(input);
     return { result };
   } catch (e) {
     console.error(e);
