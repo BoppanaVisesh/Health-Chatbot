@@ -1,68 +1,157 @@
 "use client";
 
 import { useFormState, useFormStatus } from "react-dom";
+import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { PageHeader } from '@/components/page-header';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import { medications } from '@/lib/data';
-import { Pill, Bot, User, BookOpen } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { getMedicationInfo } from "./actions";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Bot, BookOpen, Camera, Upload, X } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" disabled={pending}>
-      {pending ? "Generating..." : "Get Information"}
+      {pending ? "Analyzing..." : "Get Information"}
     </Button>
   );
 }
 
 export default function MedicationPage() {
   const [state, formAction] = useFormState(getMedicationInfo, {});
+  const [photoDataUri, setPhotoDataUri] = useState<string | null>(null);
+  const [showCamera, setShowCamera] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    return () => {
+      // Stop camera stream when component unmounts
+      if (videoRef.current?.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, []);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPhotoDataUri(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
+  const enableCamera = async () => {
+    setShowCamera(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      setHasCameraPermission(true);
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      setHasCameraPermission(false);
+      toast({
+        variant: 'destructive',
+        title: 'Camera Access Denied',
+        description: 'Please enable camera permissions in your browser settings.',
+      });
+    }
+  };
+
+  const capturePhoto = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext('2d');
+      context?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+      const dataUri = canvas.toDataURL('image/jpeg');
+      setPhotoDataUri(dataUri);
+      setShowCamera(false);
+       if (videoRef.current?.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach(track => track.stop());
+      }
+    }
+  };
+
+  const clearPhoto = () => {
+    setPhotoDataUri(null);
+  }
 
   return (
     <div className="space-y-8">
       <PageHeader
         title="Medication Information"
-        description="Look up a medication to get an explanation about its usage and dosage, or browse common medications below. This information is for educational purposes only."
+        description="Upload or take a picture of a medication or prescription to get a detailed explanation. This is for educational purposes only."
       />
 
       <Card>
         <form action={formAction}>
+          <input type="hidden" name="photoDataUri" value={photoDataUri || ""} />
           <CardHeader>
-            <CardTitle>Medication Explainer</CardTitle>
+            <CardTitle>Prescription Analyzer</CardTitle>
             <CardDescription>
-              Enter the name of a medication and any relevant context to get a detailed explanation.
+              Upload an image or use your camera to capture a photo of the medication label or prescription.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="medicationName">Medication Name</label>
-              <Input
-                id="medicationName"
-                name="medicationName"
-                placeholder="e.g., Lisinopril"
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="userContext">Personal Context (Optional)</label>
-              <Textarea
-                id="userContext"
-                name="userContext"
-                placeholder="e.g., I'm taking this for high blood pressure and want to know about side effects."
-                rows={3}
-              />
-            </div>
+            {photoDataUri ? (
+              <div className="relative">
+                <Image src={photoDataUri} alt="Prescription" width={400} height={300} className="rounded-md object-contain w-full" />
+                <Button variant="destructive" size="icon" className="absolute top-2 right-2" onClick={clearPhoto}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            ) : showCamera ? (
+               <div className="space-y-2">
+                <video ref={videoRef} className="w-full aspect-video rounded-md bg-muted" autoPlay muted playsInline />
+                <canvas ref={canvasRef} className="hidden" />
+                {hasCameraPermission === false && (
+                   <Alert variant="destructive">
+                      <AlertTitle>Camera Access Required</AlertTitle>
+                      <AlertDescription>
+                        Please allow camera access to use this feature. You might need to refresh the page and try again.
+                      </AlertDescription>
+                    </Alert>
+                )}
+                <div className="flex gap-2">
+                  <Button onClick={capturePhoto} disabled={!hasCameraPermission}>Capture Photo</Button>
+                  <Button variant="outline" onClick={() => setShowCamera(false)}>Cancel</Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex gap-4">
+                 <label htmlFor="file-upload" className="flex-1 cursor-pointer">
+                  <Card className="flex flex-col items-center justify-center p-6 text-center h-full hover:bg-accent/50 transition-colors">
+                    <Upload className="h-8 w-8 text-muted-foreground mb-2" />
+                    <span className="font-semibold">Upload Image</span>
+                    <span className="text-sm text-muted-foreground">Click here to select a file</span>
+                  </Card>
+                  <Input id="file-upload" type="file" accept="image/*" onChange={handleFileChange} className="sr-only" />
+                 </label>
+                 <Card className="flex-1 flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:bg-accent/50 transition-colors" onClick={enableCamera}>
+                    <Camera className="h-8 w-8 text-muted-foreground mb-2" />
+                    <span className="font-semibold">Use Camera</span>
+                    <span className="text-sm text-muted-foreground">Capture a photo directly</span>
+                </Card>
+              </div>
+            )}
+            
             {state?.error && (
               <p className="mt-2 text-sm text-destructive">{state.error}</p>
             )}
@@ -73,12 +162,12 @@ export default function MedicationPage() {
         </form>
       </Card>
 
-      {state?.result && state.medicationName && (
+      {state?.result && state.result.medicationName && (
         <Card>
            <CardHeader>
             <CardTitle className="flex items-center gap-3">
               <BookOpen className="h-6 w-6 text-primary" />
-              <span>Explanation for {state.medicationName}</span>
+              <span>Explanation for {state.result.medicationName}</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -95,35 +184,6 @@ export default function MedicationPage() {
         </Card>
       )}
 
-      <div className="space-y-4 pt-8">
-        <h2 className="text-2xl font-bold font-headline">Common Medications</h2>
-        <Accordion type="single" collapsible className="w-full">
-          {medications.map((med, index) => (
-            <AccordionItem value={`item-${index}`} key={med.name}>
-              <AccordionTrigger className="text-lg font-headline hover:no-underline">
-                  <div className="flex items-center gap-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                          <Pill className="h-5 w-5 text-primary" />
-                      </div>
-                      {med.name}
-                  </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="space-y-4 p-4">
-                  <div>
-                    <h3 className="font-semibold">Description</h3>
-                    <p className="text-muted-foreground">{med.description}</p>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">Common Side Effects</h3>
-                    <p className="text-muted-foreground">{med.sideEffects}</p>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </div>
     </div>
   );
 }

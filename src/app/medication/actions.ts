@@ -8,31 +8,27 @@ import {
 interface MedicationInfoState {
   result?: MedicationInfoOutput;
   error?: string;
-  medicationName?: string;
 }
 
 export async function getMedicationInfo(
   prevState: MedicationInfoState,
   formData: FormData
 ): Promise<MedicationInfoState> {
-  const medicationName = formData.get("medicationName");
-  const userContext = formData.get("userContext");
+  const photoDataUri = formData.get("photoDataUri");
 
-  if (!medicationName || typeof medicationName !== "string" || medicationName.length < 2) {
-    return { error: "Please enter a valid medication name (at least 2 characters)." };
+  if (!photoDataUri || typeof photoDataUri !== "string" || !photoDataUri.startsWith('data:image')) {
+    return { error: "Please upload or capture a valid image of the prescription." };
   }
 
   try {
     const result = await getMedicationInfoFlow({
-      medicationName,
-      userContext: typeof userContext === 'string' ? userContext : undefined,
+      photoDataUri,
     });
-    return { result, medicationName };
+    return { result };
   } catch (e) {
     console.error(e);
     return {
       error: "An error occurred while getting medication information. Please try again.",
-      medicationName,
     };
   }
 }
