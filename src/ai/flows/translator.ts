@@ -9,17 +9,8 @@
  */
 
 import {ai} from '@/ai/genkit';
+import { supportedLanguages } from '@/lib/languages';
 import {z} from 'genkit';
-
-export const supportedLanguages = [
-  { value: 'en', label: 'English' },
-  { value: 'es', label: 'Spanish' },
-  { value: 'fr', label: 'French' },
-  { value: 'de', label: 'German' },
-  { value: 'ja', label: 'Japanese' },
-  { value: 'ko', label: 'Korean' },
-  { value: 'zh', label: 'Chinese' },
-];
 
 const TranslateTextInputSchema = z.object({
   text: z.string().describe('The text to be translated.'),

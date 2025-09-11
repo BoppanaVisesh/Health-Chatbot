@@ -16,7 +16,7 @@ import { getTranslation } from "./actions";
 import { Bot, User } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { supportedLanguages } from "@/ai/flows/translator";
+import { supportedLanguages } from "@/lib/languages";
 
 
 function SubmitButton() {
@@ -54,7 +54,7 @@ export default function TranslatorPage() {
               defaultValue={state?.originalText}
             />
              <Select name="targetLanguage" required defaultValue={state?.targetLanguage}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full md:w-[280px]">
                     <SelectValue placeholder="Select Language" />
                 </SelectTrigger>
                 <SelectContent>

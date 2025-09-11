@@ -1,6 +1,7 @@
 "use server";
 
-import { translateText, type TranslateTextOutput, supportedLanguages } from "@/ai/flows/translator";
+import { translateText, type TranslateTextOutput } from "@/ai/flows/translator";
+import { supportedLanguages } from "@/lib/languages";
 
 interface TranslatorState {
   result?: TranslateTextOutput;
