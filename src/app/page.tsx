@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 import {
   Card,
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { PageHeader } from '@/components/page-header';
+import { useI18n } from '@/app/i18n/client';
 
 interface Feature {
   title: string;
@@ -77,11 +79,12 @@ const features: Feature[] = [
 ];
 
 export default function Home() {
+  const i18n = useI18n();
   return (
     <div className="flex flex-col gap-8">
       <PageHeader
-        title="Welcome to MediAI"
-        description="Your personal AI-powered healthcare assistant. How can we help you today?"
+        title={i18n.page.home.title}
+        description={i18n.page.home.description}
       />
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {features.map(({ title, description, href, Icon }) => (
