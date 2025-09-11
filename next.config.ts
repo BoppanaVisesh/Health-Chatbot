@@ -1,5 +1,4 @@
 import type {NextConfig} from 'next';
-import {i18n} from './src/app/i18n';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -33,8 +32,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-const i18nConfig = {
-  i18n,
-};
-
-export default Object.assign(nextConfig, i18nConfig);
+export default nextConfig;
