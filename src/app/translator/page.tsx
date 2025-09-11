@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { getTranslation } from "./actions";
-import { Bot, Languages, User } from "lucide-react";
+import { Bot, User } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supportedLanguages } from "@/ai/flows/translator";
@@ -53,13 +53,13 @@ export default function TranslatorPage() {
               required
               defaultValue={state?.originalText}
             />
-             <Select name="targetLanguage" required value={state?.targetLanguage}>
+             <Select name="targetLanguage" required defaultValue={state?.targetLanguage}>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select Language" />
                 </SelectTrigger>
                 <SelectContent>
                     {supportedLanguages.map(lang => (
-                        <SelectItem key={lang.value} value={lang.label}>{lang.label}</SelectItem>
+                        <SelectItem key={lang.value} value={lang.value}>{lang.label}</SelectItem>
                     ))}
                 </SelectContent>
             </Select>
@@ -92,7 +92,7 @@ export default function TranslatorPage() {
             <Card className="flex-1">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  MediAI Translation ({state.targetLanguage})
+                  MediAI Translation ({supportedLanguages.find(l => l.value === state.targetLanguage)?.label})
                 </CardTitle>
               </CardHeader>
               <CardContent>
