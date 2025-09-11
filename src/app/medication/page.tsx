@@ -135,7 +135,7 @@ export default function MedicationPage() {
                 </div>
               </div>
             ) : (
-              <div className="flex gap-4">
+              <div className="grid md:grid-cols-2 gap-4">
                  <label htmlFor="file-upload" className="flex-1 cursor-pointer">
                   <Card className="flex flex-col items-center justify-center p-6 text-center h-full hover:bg-accent/50 transition-colors">
                     <Upload className="h-8 w-8 text-muted-foreground mb-2" />

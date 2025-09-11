@@ -53,7 +53,7 @@ export default function TranslatorPage() {
               required
               defaultValue={state?.originalText}
             />
-             <Select name="targetLanguage" required defaultValue={state?.targetLanguage}>
+             <Select name="targetLanguage" required value={state?.targetLanguage}>
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select Language" />
                 </SelectTrigger>
@@ -81,7 +81,7 @@ export default function TranslatorPage() {
               <AvatarFallback><User /></AvatarFallback>
             </Avatar>
             <div className="rounded-lg bg-muted p-4">
-              <p className="font-semibold">You ({state.targetLanguage})</p>
+              <p className="font-semibold">You</p>
               <p className="text-muted-foreground">{state.originalText}</p>
             </div>
           </div>
@@ -92,7 +92,7 @@ export default function TranslatorPage() {
             <Card className="flex-1">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  MediAI Translation
+                  MediAI Translation ({state.targetLanguage})
                 </CardTitle>
               </CardHeader>
               <CardContent>
