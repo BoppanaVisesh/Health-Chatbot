@@ -3,24 +3,16 @@
 import { useFormState, useFormStatus } from "react-dom";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import QRCode from "qrcode.react";
 import { PageHeader } from '@/components/page-header';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { getMedicationInfo } from "./actions";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Bot, BookOpen, Camera, Upload, X, QrCode } from "lucide-react";
+import { Bot, BookOpen, Camera, Upload, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -101,9 +93,6 @@ export default function MedicationPage() {
   const clearPhoto = () => {
     setPhotoDataUri(null);
   }
-  
-  const qrCodeValue = state?.result ? `Medication: ${state.result.medicationName}\n\nExplanation: ${state.result.explanation}` : "";
-
 
   return (
     <div className="space-y-8">
@@ -176,32 +165,11 @@ export default function MedicationPage() {
 
       {state?.result && state.result.medicationName && (
         <Card>
-           <CardHeader>
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-3">
+          <CardHeader>
+             <div className="flex items-center gap-3">
                  <BookOpen className="h-6 w-6 text-primary" />
                  <CardTitle>Explanation for {state.result.medicationName}</CardTitle>
               </div>
-               <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline">
-                    <QrCode className="mr-2 h-4 w-4" />
-                    Generate QR Code
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Medication QR Code</DialogTitle>
-                    <DialogDescription>
-                      Scan this QR code with your phone to save the medication details.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="flex items-center justify-center p-4">
-                    <QRCode value={qrCodeValue} size={256} />
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-start gap-4">
