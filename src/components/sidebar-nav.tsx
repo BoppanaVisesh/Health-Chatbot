@@ -7,7 +7,6 @@ import {
   BrainCircuit,
   HelpCircle,
   Hospital,
-  Languages,
   LayoutDashboard,
   Pill,
   ShieldCheck,
@@ -71,12 +70,6 @@ const navItems: NavItem[] = [
     href: '/post-diagnosis',
     Icon: BookOpenCheck,
     tooltip: 'Post-Diagnosis Education',
-  },
-   {
-    title: 'Translator',
-    href: '/translator',
-    Icon: Languages,
-    tooltip: 'Translator',
   },
 ];
 

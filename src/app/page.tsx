@@ -11,7 +11,6 @@ import {
   BrainCircuit,
   HelpCircle,
   Hospital,
-  Languages,
   Pill,
   ShieldCheck,
   Stethoscope,
@@ -68,12 +67,6 @@ const features: Feature[] = [
     description: 'Understand your diagnosis and treatment options.',
     href: '/post-diagnosis',
     Icon: BookOpenCheck,
-  },
-  {
-    title: 'Translator',
-    description: 'Translate text to a different language.',
-    href: '/translator',
-    Icon: Languages,
   },
 ];
 

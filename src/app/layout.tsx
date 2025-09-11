@@ -13,7 +13,6 @@ import { Logo } from '@/components/icons';
 import { SidebarNav } from '@/components/sidebar-nav';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
-import { LanguageSelector } from '@/components/language-selector';
 
 export const metadata: Metadata = {
   title: 'MediAI',
@@ -61,7 +60,6 @@ export default function RootLayout({
               <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm sm:px-6 md:justify-end">
                 <SidebarTrigger className="md:hidden" />
                 <div className="flex items-center gap-4">
-                  <LanguageSelector />
                   <Button>Get Pro</Button>
                 </div>
               </header>
