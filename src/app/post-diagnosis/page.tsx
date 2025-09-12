@@ -83,9 +83,8 @@ export default function PostDiagnosisPage() {
               Here is your personalized educational guide.
             </CardDescription>
           </CardHeader>
-          <CardContent className="prose prose-sm max-w-none text-foreground dark:prose-invert">
-            {/* Using a key to force re-render on new content to prevent stale display */}
-            <div key={state.result.educationalMaterial} dangerouslySetInnerHTML={{ __html: state.result.educationalMaterial.replace(/\n/g, '<br />') }} />
+          <CardContent className="whitespace-pre-wrap text-foreground">
+            {state.result.educationalMaterial}
           </CardContent>
         </Card>
       )}
