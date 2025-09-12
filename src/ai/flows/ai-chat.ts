@@ -1,50 +1,40 @@
 'use server';
 
 /**
- * @fileOverview A general purpose AI chatbot.
+ * @fileOverview A general purpose AI chatbot using Ollama.
  *
- * - aiChat - A function that handles the AI chat process.
+ * - aiChat - A function that handles the AI chat process with Ollama model.
  * - AiChatInput - The input type for the aiChat function.
  * - AiChatOutput - The return type for the aiChat function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { OllamaClient } from '@/lib/ollama';
 
-const AiChatInputSchema = z.object({
-  userInput: z.string().describe('The user input for the AI chat.'),
-});
-export type AiChatInput = z.infer<typeof AiChatInputSchema>;
-
-const AiChatOutputSchema = z.object({
-  response: z.string().describe('The response from the AI chat.'),
-});
-export type AiChatOutput = z.infer<typeof AiChatOutputSchema>;
-
-export async function aiChat(input: AiChatInput): Promise<AiChatOutput> {
-  return aiChatFlow(input);
+export interface AiChatInput {
+  userInput: string;
 }
 
-const prompt = ai.definePrompt({
-  name: 'aiChatPrompt',
-  input: {schema: AiChatInputSchema},
-  output: {schema: AiChatOutputSchema},
-  prompt: `You are a helpful AI assistant.
+export interface AiChatOutput {
+  response: string;
+}
 
-  Respond to the user's input.
+// Create a singleton instance of the Ollama client
+const ollamaClient = new OllamaClient('healthbot');
 
-  Input: {{{userInput}}}
-  `,
-});
-
-const aiChatFlow = ai.defineFlow(
-  {
-    name: 'aiChatFlow',
-    inputSchema: AiChatInputSchema,
-    outputSchema: AiChatOutputSchema,
-  },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
+export async function aiChat(input: AiChatInput): Promise<AiChatOutput> {
+  if (!input.userInput?.trim()) {
+    return {
+      response: "I apologize, but I didn't receive any input. Could you please try again?"
+    };
   }
-);
+
+  try {
+    const response = await ollamaClient.chat(input.userInput);
+    return { response };
+  } catch (error) {
+    console.error('Error in aiChat:', error);
+    return {
+      response: "I apologize, but I'm having trouble processing your request. Please ensure the Ollama service is running and try again."
+    };
+  }
+}

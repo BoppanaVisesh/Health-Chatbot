@@ -16,9 +16,9 @@ export async function sendMessage(
     const result = await aiChat({ userInput });
     return result;
   } catch (e) {
-    console.error(e);
+    console.error('Error in sendMessage:', e);
     return {
-      response: "I'm sorry, something went wrong. Please try again later.",
+      response: "I apologize, but I'm having trouble connecting to the AI service. Please ensure the Ollama service is running with the 'healthbot' model and try again.",
     };
   }
 }
