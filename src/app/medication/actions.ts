@@ -1,7 +1,7 @@
 "use server";
 
 import {
-  getMedicationInfo,
+  getMedicationInfo as getMedicationInfoFlow,
   type MedicationInfoOutput,
 } from "@/ai/flows/medication-explainer";
 
@@ -21,7 +21,7 @@ export async function getMedicationInfo(
   }
 
   try {
-    const result = await getMedicationInfo({
+    const result = await getMedicationInfoFlow({
       photoDataUri,
     });
     return { result };
