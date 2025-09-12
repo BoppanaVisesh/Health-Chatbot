@@ -43,8 +43,8 @@ const mythBusterPrompt = ai.definePrompt({
   Analyze the following health claim and determine its validity. Provide an evidence-based explanation to support your analysis.
 
   Health Claim: {{{healthClaim}}}
-  \nDetermine if the claim is valid. Then, provide an explanation debunking the fake news and misinformation in the health claim.  Structure the explanation to be easily understood by a lay person.
-  Respond in the following JSON format: { \"isValid\": <true|false>, \"explanation\": \"<explanation>\"}`,
+  
+  Determine if the claim is valid. Then, provide an explanation debunking the fake news and misinformation in the health claim. Structure the explanation to be easily understood by a lay person.`,
 });
 
 const mythBusterFlow = ai.defineFlow(
