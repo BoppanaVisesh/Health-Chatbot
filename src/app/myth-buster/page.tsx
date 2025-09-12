@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormStatus } from "react-dom";
+import { useActionState } from "react";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,7 +29,7 @@ function SubmitButton() {
 }
 
 export default function MythBusterPage() {
-  const [state, formAction] = useFormState(bustMyth, {});
+  const [state, formAction] = useActionState(bustMyth, {} as any);
 
   return (
     <div className="space-y-8 w-full p-4 sm:p-6 lg:p-8">

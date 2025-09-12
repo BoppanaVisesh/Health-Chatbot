@@ -1,7 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
-import { useState, useRef, useEffect } from "react";
+import { useFormStatus } from "react-dom";
+import { useState, useRef, useEffect, useActionState } from "react";
 import Image from "next/image";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ function SubmitButton() {
 }
 
 export default function SymptomCheckerPage() {
-  const [state, formAction] = useFormState(checkSymptoms, {});
+  const [state, formAction] = useActionState(checkSymptoms, {} as any);
   const [photoDataUri, setPhotoDataUri] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
