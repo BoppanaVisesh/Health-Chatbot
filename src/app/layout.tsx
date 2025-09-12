@@ -69,8 +69,8 @@ export default function RootLayout({
         </SidebarProvider>
         <Toaster />
         <div className="fixed bottom-4 right-4 z-50">
-          <Link href="/mental-health">
-            <Button size="icon" className="h-14 w-14 rounded-full shadow-lg">
+          <Link href="/mental-health" passHref legacyBehavior>
+            <Button as="a" size="icon" className="h-14 w-14 rounded-full shadow-lg">
               <MessageCircle className="h-7 w-7" />
               <span className="sr-only">AI Chatbot</span>
             </Button>
