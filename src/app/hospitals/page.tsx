@@ -1,10 +1,37 @@
 import Image from 'next/image';
 import { PageHeader } from '@/components/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { hospitals } from '@/lib/data';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { Car, MapPin } from 'lucide-react';
+
+const hospitals = [
+  {
+    name: 'City General Hospital',
+    address: '123 Health St, Metropolis, USA',
+    distance: '2.5 miles',
+    travelTime: '10 min drive',
+  },
+  {
+    name: 'St. Jude Medical Center',
+    address: '456 Wellness Ave, Metropolis, USA',
+    distance: '3.1 miles',
+    travelTime: '12 min drive',
+  },
+  {
+    name: 'Oak Valley Community Hospital',
+    address: '789 Cure Blvd, Suburbia, USA',
+    distance: '5.8 miles',
+    travelTime: '20 min drive',
+  },
+  {
+    name: 'Northside Regional Clinic',
+    address: '101 Healing Rd, Suburbia, USA',
+    distance: '6.2 miles',
+    travelTime: '22 min drive',
+  },
+];
+
 
 export default function HospitalsPage() {
   const mapImage = PlaceHolderImages.find((img) => img.id === 'hospital-map');
@@ -43,7 +70,7 @@ export default function HospitalsPage() {
         {hospitals.map((hospital) => (
           <Card key={hospital.name}>
             <CardHeader>
-              <CardTitle className="font-headline">{hospital.name}</CardTitle>
+              <CardTitle>{hospital.name}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-3 text-muted-foreground">
