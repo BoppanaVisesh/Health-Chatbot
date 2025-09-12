@@ -41,7 +41,6 @@ export default function RootLayout({
               collapsible="icon"
               className="border-r"
               variant="sidebar"
-              defaultOpen
             >
               <SidebarHeader className="h-16 items-center justify-center p-4 lg:justify-start">
                 <Link href="/" className="flex items-center gap-2">
