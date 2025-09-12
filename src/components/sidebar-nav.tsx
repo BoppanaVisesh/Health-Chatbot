@@ -9,6 +9,7 @@ import {
   Hospital,
   LayoutDashboard,
   Pill,
+  QrCode,
   ShieldCheck,
   Stethoscope,
 } from 'lucide-react';
@@ -70,6 +71,12 @@ const navItems: NavItem[] = [
     href: '/post-diagnosis',
     Icon: BookOpenCheck,
     tooltip: 'Post-Diagnosis Education',
+  },
+  {
+    title: 'QR Health Card',
+    href: '/qr-health-card',
+    Icon: QrCode,
+    tooltip: 'Generate QR Health Card',
   },
 ];
 

@@ -13,6 +13,7 @@ import { Logo } from '@/components/icons';
 import { SidebarNav } from '@/components/sidebar-nav';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
+import { MessageCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'MediAI',
@@ -67,6 +68,14 @@ export default function RootLayout({
           </div>
         </SidebarProvider>
         <Toaster />
+        <div className="fixed bottom-4 right-4 z-50">
+          <Link href="/mental-health">
+            <Button size="icon" className="h-14 w-14 rounded-full shadow-lg">
+              <MessageCircle className="h-7 w-7" />
+              <span className="sr-only">AI Chatbot</span>
+            </Button>
+          </Link>
+        </div>
       </body>
     </html>
   );
