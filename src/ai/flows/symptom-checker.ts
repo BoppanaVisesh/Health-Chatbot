@@ -41,24 +41,60 @@ const SymptomCheckerOutputSchema = z.object({
 });
 export type SymptomCheckerOutput = z.infer<typeof SymptomCheckerOutputSchema>;
 
+// Cache for repeated requests
+const symptomCache = new Map<string, { result: SymptomCheckerOutput; timestamp: number }>();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 export async function symptomChecker(input: SymptomCheckerInput): Promise<SymptomCheckerOutput> {
-  return symptomCheckerFlow(input);
+  // Create cache key from symptoms (ignore photo for caching)
+  const cacheKey = input.symptoms.toLowerCase().trim();
+  const cached = symptomCache.get(cacheKey);
+  
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.result;
+  }
+
+  try {
+    const result = await symptomCheckerFlow(input);
+    
+    // Cache the result
+    symptomCache.set(cacheKey, { result, timestamp: Date.now() });
+    
+    // Clean up old cache entries
+    if (symptomCache.size > 100) {
+      const now = Date.now();
+      for (const [key, value] of symptomCache.entries()) {
+        if (now - value.timestamp > CACHE_DURATION) {
+          symptomCache.delete(key);
+        }
+      }
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('Symptom checker error:', error);
+    throw new Error('Failed to analyze symptoms. Please try again.');
+  }
 }
 
 const symptomCheckerPrompt = ai.definePrompt({
   name: 'symptomCheckerPrompt',
   input: {schema: SymptomCheckerInputSchema},
   output: {schema: SymptomCheckerOutputSchema},
-  prompt: `You are an AI-powered symptom checker. A user will describe their symptoms, and you will provide potential causes, recommended actions, and an urgency level. You may also be provided with an image.
+  prompt: `You are a medical AI assistant. Analyze the symptoms and provide a concise assessment.
 
 Symptoms: {{{symptoms}}}
 
 {{#if photoDataUri}}
-Photo of symptom: {{media url=photoDataUri}}
+Visual symptom: {{media url=photoDataUri}}
 {{/if}}
 
-Analyze the provided information and respond in a structured JSON format.
-`,
+Provide:
+1. Potential causes (2-3 most likely)
+2. Recommended actions (immediate steps)
+3. Urgency level (low/medium/high)
+
+Be concise and professional.`,
 });
 
 const symptomCheckerFlow = ai.defineFlow(

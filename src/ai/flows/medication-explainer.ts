@@ -30,28 +30,59 @@ const MedicationInfoOutputSchema = z.object({
 });
 export type MedicationInfoOutput = z.infer<typeof MedicationInfoOutputSchema>;
 
+// Cache for repeated requests
+const medicationCache = new Map<string, { result: MedicationInfoOutput; timestamp: number }>();
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes (medications change less frequently)
+
 export async function getMedicationInfo(
   input: MedicationInfoInput
 ): Promise<MedicationInfoOutput> {
-  return getMedicationInfoFlow(input);
+  // Create cache key from image hash (first 50 chars of base64)
+  const cacheKey = input.photoDataUri.substring(0, 50);
+  const cached = medicationCache.get(cacheKey);
+  
+  if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+    return cached.result;
+  }
+
+  try {
+    const result = await getMedicationInfoFlow(input);
+    
+    // Cache the result
+    medicationCache.set(cacheKey, { result, timestamp: Date.now() });
+    
+    // Clean up old cache entries
+    if (medicationCache.size > 50) {
+      const now = Date.now();
+      for (const [key, value] of medicationCache.entries()) {
+        if (now - value.timestamp > CACHE_DURATION) {
+          medicationCache.delete(key);
+        }
+      }
+    }
+    
+    return result;
+  } catch (error) {
+    console.error('Medication analyzer error:', error);
+    throw new Error('Failed to analyze medication. Please try again.');
+  }
 }
 
 const prompt = ai.definePrompt({
   name: 'medicationExplainerPrompt',
   input: {schema: MedicationInfoInputSchema},
   output: {schema: MedicationInfoOutputSchema},
-  prompt: `You are an AI pharmacist. Your role is to analyze an image of a medication label or a doctor's prescription and provide clear, easy-to-understand information about the medication.
+  prompt: `You are an AI pharmacist. Analyze the medication image and provide clear information.
 
-From the image provided, identify the medication name. Then, provide a detailed explanation that covers:
-1.  What the medication is used for.
-2.  Common dosage information (provide a general range, not specific medical advice).
-3.  Why it is important to take as prescribed.
-4.  Mention that this is not a substitute for professional medical advice and the user should consult their doctor.
+Image: {{media url=photoDataUri}}
 
-Generate the explanation in a conversational and helpful tone.
+Identify the medication name and provide:
+1. What it's used for
+2. Common dosage (general range only)
+3. Important considerations
+4. Reminder to consult doctor
 
-Photo of medication/prescription: {{media url=photoDataUri}}
-`,
+Be concise and helpful.`,
 });
 
 const getMedicationInfoFlow = ai.defineFlow(

@@ -17,8 +17,15 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending}>
-      {pending ? "Analyzing..." : "Get Information"}
+    <Button type="submit" disabled={pending} className="w-full sm:w-auto">
+      {pending ? (
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+          Analyzing Prescription...
+        </div>
+      ) : (
+        "Get Information"
+      )}
     </Button>
   );
 }
@@ -42,14 +49,48 @@ export default function MedicationPage() {
     };
   }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const compressImage = (file: File, maxWidth: number = 800, quality: number = 0.8): Promise<string> => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      img.onload = () => {
+        // Calculate new dimensions
+        let { width, height } = img;
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw and compress
+        ctx?.drawImage(img, 0, 0, width, height);
+        const compressedDataUri = canvas.toDataURL('image/jpeg', quality);
+        resolve(compressedDataUri);
+      };
+      
+      img.src = URL.createObjectURL(file);
+    });
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPhotoDataUri(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const compressedDataUri = await compressImage(file);
+        setPhotoDataUri(compressedDataUri);
+      } catch (error) {
+        console.error('Error compressing image:', error);
+        // Fallback to original method
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setPhotoDataUri(e.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
   
@@ -76,11 +117,20 @@ export default function MedicationPage() {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      
+      // Calculate compressed dimensions
+      const maxWidth = 800;
+      let { videoWidth, videoHeight } = video;
+      if (videoWidth > maxWidth) {
+        videoHeight = (videoHeight * maxWidth) / videoWidth;
+        videoWidth = maxWidth;
+      }
+      
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
       const context = canvas.getContext('2d');
-      context?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-      const dataUri = canvas.toDataURL('image/jpeg');
+      context?.drawImage(video, 0, 0, videoWidth, videoHeight);
+      const dataUri = canvas.toDataURL('image/jpeg', 0.8); // Compress to 80% quality
       setPhotoDataUri(dataUri);
       setShowCamera(false);
        if (videoRef.current?.srcObject) {
