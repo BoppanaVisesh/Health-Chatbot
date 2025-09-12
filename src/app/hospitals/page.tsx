@@ -37,7 +37,7 @@ export default function HospitalsPage() {
   const mapImage = PlaceHolderImages.find((img) => img.id === 'hospital-map');
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full p-4 sm:p-6 lg:p-8 force-full-width">
       <PageHeader
         title="Find Nearby Hospitals"
         description="Locate hospitals and clinics near you. The data shown is for demonstration purposes."
@@ -60,30 +60,30 @@ export default function HospitalsPage() {
             )}
             <div className="absolute inset-0 bg-black/20" />
             <div className="absolute inset-0 flex items-center justify-center">
-                <p className="text-2xl font-bold text-white">(Map integration requires API key)</p>
+                <p className="text-xl sm:text-2xl font-bold text-white text-center px-4">(Map integration requires API key)</p>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
         {hospitals.map((hospital) => (
-          <Card key={hospital.name}>
+          <Card key={hospital.name} className="hover:shadow-lg transition-shadow">
             <CardHeader>
-              <CardTitle>{hospital.name}</CardTitle>
+              <CardTitle className="text-lg">{hospital.name}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-center gap-3 text-muted-foreground">
                 <MapPin className="h-4 w-4 shrink-0" />
-                <span>{hospital.address}</span>
+                <span className="text-sm">{hospital.address}</span>
               </div>
               <div className="flex items-center gap-3 text-muted-foreground">
                 <Car className="h-4 w-4 shrink-0" />
-                <span>
+                <span className="text-sm">
                   {hospital.distance} away ({hospital.travelTime})
                 </span>
               </div>
-              <Button className='mt-2'>Get Directions</Button>
+              <Button className='mt-4 w-full sm:w-auto'>Get Directions</Button>
             </CardContent>
           </Card>
         ))}

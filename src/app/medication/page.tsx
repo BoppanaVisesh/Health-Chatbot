@@ -53,7 +53,7 @@ export default function MedicationPage() {
     return new Promise((resolve) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      const img = new Image();
+      const img = document.createElement('img');
       
       img.onload = () => {
         // Calculate new dimensions
@@ -145,7 +145,7 @@ export default function MedicationPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Medication Information"
         description="Upload or take a picture of a medication or prescription to get a detailed explanation. This is for educational purposes only."
@@ -162,15 +162,15 @@ export default function MedicationPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {photoDataUri ? (
-              <div className="relative">
-                <Image src={photoDataUri} alt="Prescription" width={400} height={300} className="rounded-md object-contain w-full" />
+              <div className="relative max-w-md mx-auto">
+                <Image src={photoDataUri} alt="Prescription" width={400} height={300} className="rounded-md object-contain w-full border" />
                 <Button variant="destructive" size="icon" className="absolute top-2 right-2" onClick={clearPhoto}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
             ) : showCamera ? (
-               <div className="space-y-2">
-                <video ref={videoRef} className="w-full aspect-video rounded-md bg-muted" autoPlay muted playsInline />
+               <div className="space-y-4 max-w-md mx-auto">
+                <video ref={videoRef} className="w-full aspect-video rounded-md bg-muted border" autoPlay muted playsInline />
                 <canvas ref={canvasRef} className="hidden" />
                 {hasCameraPermission === false && (
                    <Alert variant="destructive">
@@ -181,21 +181,21 @@ export default function MedicationPage() {
                     </Alert>
                 )}
                 <div className="flex gap-2">
-                  <Button onClick={capturePhoto} disabled={!hasCameraPermission}>Capture Photo</Button>
-                  <Button variant="outline" onClick={() => setShowCamera(false)}>Cancel</Button>
+                  <Button onClick={capturePhoto} disabled={!hasCameraPermission} className="flex-1">Capture Photo</Button>
+                  <Button variant="outline" onClick={() => setShowCamera(false)} className="flex-1">Cancel</Button>
                 </div>
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
                  <label htmlFor="file-upload" className="flex-1 cursor-pointer">
-                  <Card className="flex flex-col items-center justify-center p-6 text-center h-full hover:bg-accent/50 transition-colors">
+                  <Card className="flex flex-col items-center justify-center p-6 text-center h-full hover:bg-accent/50 transition-colors border-dashed">
                     <Upload className="h-8 w-8 text-muted-foreground mb-2" />
                     <span className="font-semibold">Upload Image</span>
                     <span className="text-sm text-muted-foreground">Click here to select a file</span>
                   </Card>
                   <Input id="file-upload" type="file" accept="image/*" onChange={handleFileChange} className="sr-only" />
                  </label>
-                 <Card className="flex-1 flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:bg-accent/50 transition-colors" onClick={enableCamera}>
+                 <Card className="flex-1 flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:bg-accent/50 transition-colors border-dashed" onClick={enableCamera}>
                     <Camera className="h-8 w-8 text-muted-foreground mb-2" />
                     <span className="font-semibold">Use Camera</span>
                     <span className="text-sm text-muted-foreground">Capture a photo directly</span>
@@ -204,10 +204,10 @@ export default function MedicationPage() {
             )}
             
             {state?.error && (
-              <p className="mt-2 text-sm text-destructive">{state.error}</p>
+              <p className="mt-2 text-sm text-destructive text-center">{state.error}</p>
             )}
           </CardContent>
-          <CardFooter>
+          <CardFooter className="justify-center">
             <SubmitButton />
           </CardFooter>
         </form>
@@ -223,12 +223,14 @@ export default function MedicationPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-start gap-4">
-              <Avatar>
+              <Avatar className="shrink-0">
                 <AvatarFallback><Bot /></AvatarFallback>
               </Avatar>
               <div className="flex-1 space-y-2">
-                <p className="font-semibold">MediAI Pharmacist</p>
-                <p className="text-muted-foreground">{state.result.explanation}</p>
+                <p className="font-semibold">Dhadhi Pharmacist</p>
+                <div className="prose prose-sm max-w-none text-muted-foreground">
+                  <p>{state.result.explanation}</p>
+                </div>
               </div>
             </div>
           </CardContent>

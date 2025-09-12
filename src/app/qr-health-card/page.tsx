@@ -37,12 +37,12 @@ export default function QrHealthCardPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Generate QR Health Card"
         description="Create a personal QR code for your health information."
       />
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-8 lg:grid-cols-2">
         <Card className="flex flex-col">
           <CardHeader>
             <CardTitle>Upload Your Medical Documents</CardTitle>
@@ -53,7 +53,7 @@ export default function QrHealthCardPage() {
           <CardContent className="flex-1 space-y-4">
             <label
               htmlFor="file-upload"
-              className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border p-8 text-center hover:bg-accent/50"
+              className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border p-8 text-center hover:bg-accent/50 transition-colors"
             >
               <Upload className="mb-2 h-8 w-8 text-muted-foreground" />
               <span className="font-semibold">Click to upload documents</span>
@@ -72,20 +72,20 @@ export default function QrHealthCardPage() {
             {uploadedFiles.length > 0 && (
               <div className="space-y-2">
                 <h4 className="font-medium">Uploaded Files:</h4>
-                <ul className="space-y-2">
+                <ul className="space-y-2 max-h-48 overflow-y-auto">
                   {uploadedFiles.map((file, index) => (
                     <li
                       key={index}
                       className="flex items-center justify-between rounded-md border p-2"
                     >
                       <div className="flex items-center gap-2">
-                        <FileText className="h-5 w-5 text-muted-foreground" />
-                        <span className="text-sm">{file.name}</span>
+                        <FileText className="h-5 w-5 text-muted-foreground shrink-0" />
+                        <span className="text-sm truncate">{file.name}</span>
                       </div>
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-6 w-6"
+                        className="h-6 w-6 shrink-0"
                         onClick={() => removeFile(index)}
                       >
                         <X className="h-4 w-4" />
@@ -97,7 +97,7 @@ export default function QrHealthCardPage() {
             )}
           </CardContent>
           <CardFooter>
-            <Button onClick={handleGenerateQr} disabled={uploadedFiles.length === 0}>
+            <Button onClick={handleGenerateQr} disabled={uploadedFiles.length === 0} className="w-full sm:w-auto">
               <QrCode className="mr-2 h-4 w-4" />
               Generate QR Code
             </Button>
@@ -111,20 +111,23 @@ export default function QrHealthCardPage() {
               Scan this code to access your uploaded documents.
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex items-center justify-center">
+          <CardContent className="flex items-center justify-center min-h-80">
             {qrCode ? (
-              <Image
-                src={qrCode}
-                alt="Health QR Code"
-                width={256}
-                height={256}
-                className="rounded-lg"
-                data-ai-hint="qr code"
-              />
+              <div className="text-center space-y-4">
+                <Image
+                  src={qrCode}
+                  alt="Health QR Code"
+                  width={256}
+                  height={256}
+                  className="rounded-lg mx-auto border"
+                  data-ai-hint="qr code"
+                />
+                <Button variant="outline" size="sm">Download QR Code</Button>
+              </div>
             ) : (
               <div className="flex h-64 w-64 flex-col items-center justify-center rounded-lg bg-muted text-center text-muted-foreground">
                 <QrCode className="mb-4 h-12 w-12" />
-                <p>Your QR code will appear here after you upload documents and click 'Generate'.</p>
+                <p className="text-sm px-4">Your QR code will appear here after you upload documents and click 'Generate'.</p>
               </div>
             )}
           </CardContent>

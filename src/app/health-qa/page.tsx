@@ -28,7 +28,7 @@ export default function HealthQAPage() {
   const [state, formAction] = useFormState(askQuestion, {});
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Health Q&A"
         description="Ask any health-related question and get a reliable answer from our AI, based on verified medical knowledge."
@@ -74,7 +74,7 @@ export default function HealthQAPage() {
             <Card className="flex-1">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  MediAI Answer
+                  Dhadhi Answer
                 </CardTitle>
               </CardHeader>
               <CardContent>

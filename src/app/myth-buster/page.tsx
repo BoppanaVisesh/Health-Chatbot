@@ -31,7 +31,7 @@ export default function MythBusterPage() {
   const [state, formAction] = useFormState(bustMyth, {});
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Myth Buster"
         description="Enter a questionable health claim to see if it's a fact or fiction. Our AI will provide an evidence-based explanation."

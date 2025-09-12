@@ -29,7 +29,7 @@ export default function PostDiagnosisPage() {
   const [state, formAction] = useFormState(generateEducation, {});
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 w-full p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Post-Diagnosis Education"
         description="Receive personalized educational materials to better understand your diagnosis, treatment options, and self-care advice."

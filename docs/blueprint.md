@@ -1,4 +1,4 @@
-# **App Name**: MediAI
+# **App Name**: Dhadhi
 
 ## Core Features:
 

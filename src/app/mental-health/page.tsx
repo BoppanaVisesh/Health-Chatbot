@@ -65,7 +65,7 @@ export default function MentalHealthChatPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-5rem)] flex-col">
+    <div className="flex h-[calc(100vh-5rem)] flex-col w-full p-4 sm:p-6 lg:p-8">
       <PageHeader
         title="Mental Health Support"
         description="A safe and anonymous space to talk. This is not a substitute for professional therapy."

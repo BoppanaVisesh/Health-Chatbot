@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { PageHeader } from '@/components/page-header';
+import { FadeIn, StaggeredList } from '@/components/ui/page-transition';
 
 interface Feature {
   title: string;
@@ -79,26 +80,36 @@ const features: Feature[] = [
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-8">
-      <PageHeader
-        title="Welcome to MediAI"
-        description="Your personal AI-powered healthcare assistant. How can we help you today?"
-      />
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="flex flex-col gap-8 w-full p-4 sm:p-6 lg:p-8">
+      <FadeIn delay={100}>
+        <PageHeader
+          title="Welcome to Dhadhi"
+          description="Your personal AI-powered healthcare assistant. How can we help you today?"
+        />
+      </FadeIn>
+      
+      <StaggeredList 
+        staggerDelay={100}
+        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      >
         {features.map(({ title, description, href, Icon }) => (
           <Link href={href} key={title}>
-            <Card className="flex h-full flex-col justify-between transition-transform hover:-translate-y-1 hover:shadow-lg">
-              <CardHeader>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <Icon className="h-6 w-6 text-primary" />
+            <Card className="flex h-full flex-col justify-between card-hover group cursor-pointer">
+              <CardHeader className="pb-4">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-all duration-300">
+                  <Icon className="h-6 w-6 text-primary transition-transform duration-200 group-hover:scale-110" />
                 </div>
-                <CardTitle className="font-headline text-xl">{title}</CardTitle>
-                <CardDescription>{description}</CardDescription>
+                <CardTitle className="font-headline text-xl leading-tight transition-colors duration-200 group-hover:text-primary">
+                  {title}
+                </CardTitle>
+                <CardDescription className="text-sm leading-relaxed transition-colors duration-200">
+                  {description}
+                </CardDescription>
               </CardHeader>
             </Card>
           </Link>
         ))}
-      </div>
+      </StaggeredList>
     </div>
   );
 }
