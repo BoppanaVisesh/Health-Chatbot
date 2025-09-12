@@ -11,6 +11,7 @@ import {
   BrainCircuit,
   HelpCircle,
   Hospital,
+  MessageCircle,
   Pill,
   ShieldCheck,
   Stethoscope,
@@ -43,6 +44,12 @@ const features: Feature[] = [
     description: 'Look up medication details, side effects, and more.',
     href: '/medication',
     Icon: Pill,
+  },
+  {
+    title: 'AI Chat',
+    description: 'Chat with a helpful AI assistant.',
+    href: '/ai-chat',
+    Icon: MessageCircle,
   },
   {
     title: 'Mental Health Chat',

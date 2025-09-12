@@ -8,6 +8,7 @@ import {
   HelpCircle,
   Hospital,
   LayoutDashboard,
+  MessageCircle,
   Pill,
   QrCode,
   ShieldCheck,
@@ -47,6 +48,12 @@ const navItems: NavItem[] = [
     href: '/medication',
     Icon: Pill,
     tooltip: 'Medication Info',
+  },
+  {
+    title: 'AI Chat',
+    href: '/ai-chat',
+    Icon: MessageCircle,
+    tooltip: 'AI Chat',
   },
   {
     title: 'Mental Health',
