@@ -31,9 +31,10 @@ export default function QrHealthCardPage() {
   };
 
   const handleGenerateQr = () => {
-    // In a real application, you would process the files and generate a QR code
-    // with the relevant data. For now, we'll use a placeholder.
-    setQrCode('https://picsum.photos/seed/qr-code/256/256');
+    // Temporary: generate a random QR code with a random payload
+    const payload = `health-card:${typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : Math.random().toString(36).slice(2)}`;
+    const url = `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(payload)}`;
+    setQrCode(url);
   };
 
   return (
@@ -97,7 +98,7 @@ export default function QrHealthCardPage() {
             )}
           </CardContent>
           <CardFooter>
-            <Button onClick={handleGenerateQr} disabled={uploadedFiles.length === 0} className="w-full sm:w-auto">
+            <Button onClick={handleGenerateQr} className="w-full sm:w-auto">
               <QrCode className="mr-2 h-4 w-4" />
               Generate QR Code
             </Button>

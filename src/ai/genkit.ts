@@ -1,16 +1,16 @@
 import {genkit} from 'genkit';
 import {googleAI} from '@genkit-ai/googleai';
 
+const apiKey = process.env.GOOGLE_API_KEY;
+if (!apiKey) {
+  throw new Error(
+    'Missing GOOGLE_API_KEY. Add it to your .env.local and restart the dev server.'
+  );
+}
+
 export const ai = genkit({
   plugins: [googleAI({
-    apiKey: process.env.GOOGLE_API_KEY,
+    apiKey,
   })],
   model: 'googleai/gemini-2.5-flash',
-  // Performance optimizations
-  config: {
-    temperature: 0.3, // Lower temperature for more consistent responses
-    maxOutputTokens: 1000, // Limit response length for faster processing
-    topP: 0.8,
-    topK: 40,
-  },
 });

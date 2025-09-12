@@ -28,12 +28,17 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'api.qrserver.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   experimental: {
     serverActions: {
       bodySizeLimit: '2mb',
-      serverActionsTimeout: 60 * 2, // 2 minutes
     },
   },
 };

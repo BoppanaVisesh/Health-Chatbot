@@ -26,7 +26,7 @@ A Next.js health chatbot application with AI-powered symptom checking and prescr
 npm install
 ```
 
-2. Create a `.env.local` file with your Google AI API key:
+2. Create a `.env.local` file with your Google AI API key (you can copy from `.env.local.example`):
 ```env
 GOOGLE_API_KEY=your_google_ai_api_key_here
 NEXT_PUBLIC_APP_URL=http://localhost:9002
@@ -42,12 +42,14 @@ npm run dev
 npm run genkit:dev
 ```
 
-## Getting Google AI API Key
+## Getting Google AI (Gemini) API Key
 
 1. Go to [Google AI Studio](https://aistudio.google.com/)
 2. Create a new project or select an existing one
 3. Generate an API key
 4. Add it to your `.env.local` file
+
+If `GOOGLE_API_KEY` is missing, the app will throw a clear error at startup: "Missing GOOGLE_API_KEY. Add it to your .env.local and restart the dev server."
 
 ## Performance Improvements
 

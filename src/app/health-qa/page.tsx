@@ -1,6 +1,7 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +26,7 @@ function SubmitButton() {
 }
 
 export default function HealthQAPage() {
-  const [state, formAction] = useFormState(askQuestion, {});
+  const [state, formAction] = useActionState(askQuestion, {} as any);
 
   return (
     <div className="space-y-8 w-full p-4 sm:p-6 lg:p-8">
