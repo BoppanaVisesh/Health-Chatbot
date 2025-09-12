@@ -193,7 +193,8 @@ const sidebarVariants = cva("group", {
 
 const Sidebar = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<"div"> & VariantProps<typeof sidebarVariants>
+  React.ComponentProps<"div"> &
+    VariantProps<typeof sidebarVariants> & { defaultOpen?: boolean }
 >(
   (
     {
@@ -202,6 +203,7 @@ const Sidebar = React.forwardRef<
       collapsible = "offcanvas",
       className,
       children,
+      defaultOpen,
       ...props
     },
     ref
