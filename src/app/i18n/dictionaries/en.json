@@ -4,5 +4,37 @@
       "title": "Welcome to Dhadhi",
       "description": "Your personal AI-powered healthcare assistant. How can we help you today?"
     }
+  },
+  "health": {
+    "symptoms": {
+      "fever": "fever",
+      "cough": "cough",
+      "fatigue": "fatigue",
+      "headache": "headache",
+      "back_pain": "back pain",
+      "chest_pain": "chest pain",
+      "muscle_weakness": "muscle weakness"
+    },
+    "diseases": {
+      "common_cold": "Common Cold",
+      "flu": "Influenza",
+      "pneumonia": "Pneumonia",
+      "tuberculosis": "Tuberculosis",
+      "heart_disease": "Heart Disease"
+    },
+    "descriptions": {
+      "common_cold": "A viral infection of the upper respiratory tract",
+      "flu": "A contagious respiratory illness caused by influenza viruses",
+      "pneumonia": "An infection that inflames the air sacs in one or both lungs",
+      "tuberculosis": "A bacterial infection that mainly affects the lungs",
+      "heart_disease": "A condition that affects the heart's function and structure"
+    },
+    "precautions": {
+      "rest": "Get plenty of rest",
+      "hydration": "Stay hydrated",
+      "medication": "Take prescribed medications",
+      "avoid_contact": "Avoid close contact with others",
+      "seek_doctor": "Consult a healthcare professional"
+    }
   }
 }
